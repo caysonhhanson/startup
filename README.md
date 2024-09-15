@@ -30,4 +30,4 @@ Database:Store workout history, progress, and leaderboard scores.
 
 Websockets:Real -time communication during live workoouts which allows users to see immediate feedback and metrics. Broaacasts for leaderboard updates and live user challengs.
 
-[Mock](./Users/caysonhanson/Documents/cs260/startup/websitesketch.jpeg)
+[Mock](websitesketch.jpeg)
