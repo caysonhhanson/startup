@@ -1,0 +1,144 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #b0b0b0; /* Light grey background */
+    color: white; /* Default text color */
+}
+
+/* Header */
+header {
+    background-color: black; /* Black header */
+    padding: 20px 0;
+    text-align: center; /* Center the content */
+}
+
+header h1 {
+    color: white; /* White text */
+    font-size: 2.5em;
+    margin: 0;
+}
+
+header img {
+    display: block;
+    margin: 20px auto; /* Center the logo */
+    width: 150px; /* Adjust size as needed */
+    height: auto;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    font-size: 1.2em;
+    color: white; /* White text for navigation */
+    padding: 10px;
+    border-radius: 5px;
+    text-transform: uppercase; /* Make the nav text uppercase */
+}
+
+nav ul li a:hover {
+    background-color: #444; /* Dark grey hover effect */
+    color: white;
+}
+
+/* Main Section */
+main {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: auto; /* Center the main content */
+    background-color: #444; /* Dark grey content background */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    color: white; /* White text */
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    color: white; /* White text */
+    font-size: 1.2em;
+    text-align: center; /* Center the text */
+}
+
+a {
+    color: #1abc9c; /* Greenish link */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #16a085;
+}
+
+/* Form Section */
+#login form {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #666; /* Lighter grey for forms */
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#login label {
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+}
+
+#login input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    background-color: #555; /* Darker input background */
+    color: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db; /* Blue button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+/* Footer */
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #1abc9c;
+}
+
+footer a:hover {
+    color: #16a085;
+}
