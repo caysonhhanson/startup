@@ -39,3 +39,11 @@ Websockets:Real -time communication during live workoouts which allows users to 
  Images - I included a logo i made for my app.
  DB/Login - Input box and submit button for login. The leaderbaord represents data pulled from the database.
  WebSocket - The count of live leaderboard updates and live sessions.
+
+
+ Header, footer, and main content body
+ Navigation elements - I dropped the underlines and changed the color for anchor elements.
+ Responsive to window resizing - My app looks adapts to  all window sizes.
+ Application elements - Used good contrast
+ Application text content - Consistent fonts
+ Application images - Centered and sized my logo
