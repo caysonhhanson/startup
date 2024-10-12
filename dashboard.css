@@ -1,28 +1,28 @@
-/* Global Styles */
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #b0b0b0; /* Light grey background */
-    color: white; /* Default text color for body */
+    background-color: #b0b0b0; 
+    color: white; 
 }
 
-/* Header */
+
 header {
-    background-color: #b0b0b0; /* Same light grey background */
+    background-color: #b0b0b0;
     padding: 20px 0;
-    text-align: center; /* Center the header content */
+    text-align: center;
     position: relative;
-    border-bottom: 2px solid #444; /* Line under the header */
+    border-bottom: 2px solid #444;
 }
 
 header h1 {
-    color: black; /* Black text for the welcome message */
+    color: black; 
     font-size: 2.5em;
     margin: 0;
 }
 
-/* Navigation */
+
 nav ul {
     list-style: none;
     padding: 0;
@@ -37,45 +37,45 @@ nav ul li {
 
 nav ul li a {
     font-size: 1.2em;
-    color: #1abc9c; /* Light blue links */
+    color: #1abc9c; 
     padding: 10px;
     border-radius: 5px;
-    text-transform: uppercase; /* Make nav text uppercase */
+    text-transform: uppercase; 
 }
 
 nav ul li a:hover {
-    background-color: #444; /* Dark grey hover effect */
+    background-color: #444; 
     color: white;
 }
 
-/* Main Section - Two Column Layout */
+
 main {
-    display: flex; /* Flexbox layout */
+    display: flex; 
     justify-content: space-between;
     padding: 40px 20px;
     max-width: 1200px;
-    margin: auto; /* Center the content block */
+    margin: auto; 
 }
 
-/* Left and Right Columns */
+
 .left-column, .right-column {
-    width: 48%; /* Each column takes up roughly half the space */
-    background-color: #444; /* Dark grey background for the columns */
+    width: 50%; 
+    background-color: #444; 
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Headings */
+
 h2 {
-    color: black; /* Black text for all h2 headings */
+    color: black;
     font-size: 2em;
     margin-bottom: 20px;
 }
 
-/* Recommended Workouts Section */
+
 #recommended-workouts h2 {
-    color: black; /* Ensure right column h2 is black as well */
+    color: black;
     text-align: left;
 }
 
@@ -87,17 +87,15 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* Links */
 a {
-    color: #1abc9c; /* Light blue for links */
+    color: #1abc9c;
     text-decoration: none;
 }
 
 a:hover {
-    color: #16a085; /* Darker blue on hover */
+    color: #16a085; 
 }
 
-/* Footer */
 footer {
     background-color: black;
     color: white;
