@@ -1,0 +1,117 @@
+/* Global Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #b0b0b0; /* Light grey background */
+    color: white; /* Default text color for body */
+}
+
+/* Header */
+header {
+    background-color: #b0b0b0; /* Same light grey background */
+    padding: 20px 0;
+    text-align: center; /* Center the header content */
+    position: relative;
+    border-bottom: 2px solid #444; /* Line under the header */
+}
+
+header h1 {
+    color: black; /* Black text for the welcome message */
+    font-size: 2.5em;
+    margin: 0;
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    font-size: 1.2em;
+    color: #1abc9c; /* Light blue links */
+    padding: 10px;
+    border-radius: 5px;
+    text-transform: uppercase; /* Make nav text uppercase */
+}
+
+nav ul li a:hover {
+    background-color: #444; /* Dark grey hover effect */
+    color: white;
+}
+
+/* Main Section - Two Column Layout */
+main {
+    display: flex; /* Flexbox layout */
+    justify-content: space-between;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto; /* Center the content block */
+}
+
+/* Left and Right Columns */
+.left-column, .right-column {
+    width: 48%; /* Each column takes up roughly half the space */
+    background-color: #444; /* Dark grey background for the columns */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Headings */
+h2 {
+    color: black; /* Black text for all h2 headings */
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+/* Recommended Workouts Section */
+#recommended-workouts h2 {
+    color: black; /* Ensure right column h2 is black as well */
+    text-align: left;
+}
+
+#recommended-workouts ul {
+    padding-left: 20px;
+}
+
+#recommended-workouts li {
+    margin-bottom: 10px;
+}
+
+/* Links */
+a {
+    color: #1abc9c; /* Light blue for links */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #16a085; /* Darker blue on hover */
+}
+
+/* Footer */
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #1abc9c;
+}
+
+footer a:hover {
+    color: #16a085;
+}
+
