@@ -1,0 +1,22 @@
+main {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .left-column, .right-column {
+    width: 48%;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .stat-card {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 4px;
+  }
