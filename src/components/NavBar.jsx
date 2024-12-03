@@ -3,14 +3,13 @@ import logo from '../assets/logo.png';
 import '../styles/NavBar.css';
 
 export default function NavBar() {
-  // This will be replaced with actual auth logic later
   const isLoggedIn = window.location.pathname !== '/';
 
   return (
     <header>
       <div className="logo-container">
         <img src={logo} alt="RealTime Fitness" className="logo" />
-        <span className="tagline">Fitness Done Right</span>
+        <h1 className="tagline">Fitness Done Right</h1>
       </div>
       <nav>
         <ul>

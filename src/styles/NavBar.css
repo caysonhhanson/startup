@@ -1,17 +1,29 @@
 header {
     background-color: #b0b0b0;
-    padding: 20px 0;
+    padding: 2rem 0;
     text-align: center;
     border-bottom: 2px solid #444;
   }
   
   .logo-container {
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
   }
   
   .logo {
-    height: 60px;
-    width: auto;
+    width: 400px; /* Increased size */
+    height: auto;
+    margin-bottom: 1rem;
+  }
+  
+  .tagline {
+    font-size: 2.5rem; /* Bigger text */
+    color: #1abc9c;
+    text-transform: uppercase;
+    margin: 1rem 0;
+    font-weight: bold;
   }
   
   nav ul {
