@@ -22,22 +22,26 @@ export default function LiveSession() {
   }, []);
 
   return (
-    <main>
+    <main className="live-session">
+      <h1>Live Workout Session</h1>
+      
       <section id="live-video">
-        <h2>Live Workout Stream</h2>
         <div className="video-placeholder">
-          Live workout video stream will appear here
+          Placeholder for live workout video stream
         </div>
       </section>
 
       <section id="nutrition-info">
-        <h2>Nutrition Information</h2>
+        <h2>Nutrition Information For You</h2>
         {nutritionInfo && (
           <div className="nutrition-data">
-            <p>Daily Target: {nutritionInfo.calories} calories</p>
-            <p>Protein: {nutritionInfo.protein}</p>
-            <p>Carbs: {nutritionInfo.carbs}</p>
-            <p>Fats: {nutritionInfo.fats}</p>
+            <p>Your Daily Nutrition Targets:</p>
+            <ul>
+              <li>Calories: {nutritionInfo.calories}</li>
+              <li>Protein: {nutritionInfo.protein}</li>
+              <li>Carbs: {nutritionInfo.carbs}</li>
+              <li>Fats: {nutritionInfo.fats}</li>
+            </ul>
           </div>
         )}
       </section>
@@ -45,9 +49,13 @@ export default function LiveSession() {
       <section id="websocket-data">
         <h2>Coach Interaction</h2>
         <div className="messages">
-          {wsMessages.map((msg, index) => (
-            <p key={index}>{msg}</p>
-          ))}
+          {wsMessages.length === 0 ? (
+            <p>Waiting for coach messages...</p>
+          ) : (
+            wsMessages.map((msg, index) => (
+              <p key={index} className="message">{msg}</p>
+            ))
+          )}
         </div>
       </section>
     </main>

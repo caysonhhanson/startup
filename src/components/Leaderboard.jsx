@@ -9,30 +9,38 @@ export default function Leaderboard() {
   ]);
 
   return (
-    <main>
-      <h2>Top Performers</h2>
-      <div id="db-data">
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Points</th>
-              <th>Workouts</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaderboardData.map((user, index) => (
-              <tr key={user.id}>
-                <td>{index + 1}</td>
-                <td>{user.name}</td>
-                <td>{user.points}</td>
-                <td>{user.workouts}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <main className="leaderboard">
+      <h1>Leaderboard</h1>
+      
+      <section className="top-performers">
+        <h2>Top Performers</h2>
+        <div id="db-data">
+          {leaderboardData.length === 0 ? (
+            <p>Loading leaderboard data...</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Points</th>
+                  <th>Workouts</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboardData.map((user, index) => (
+                  <tr key={user.id}>
+                    <td>{index + 1}</td>
+                    <td>{user.name}</td>
+                    <td>{user.points}</td>
+                    <td>{user.workouts}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
     </main>
   );
 }
