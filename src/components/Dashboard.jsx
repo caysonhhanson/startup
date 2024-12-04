@@ -26,6 +26,7 @@ export default function Dashboard() {
         setQuote(data.content);
       } catch (error) {
         console.error('Error fetching quote:', error);
+        setQuote("Success is not final, failure is not fatal: it is the courage to continue that counts.");
       }
     };
 
@@ -37,11 +38,15 @@ export default function Dashboard() {
     <main>
       <h1>Welcome, {userName}</h1>
       
-      {quote && (
-        <div className="quote-section">
-          <p><em>"{quote}"</em></p>
-        </div>
-      )}
+      <div className="quote-section" style={{ 
+        backgroundColor: '#f5f5f5', 
+        padding: '20px', 
+        margin: '20px 0',
+        borderRadius: '8px',
+        textAlign: 'center' 
+      }}>
+        <p><em>"{quote || 'Loading quote...'}"</em></p>
+      </div>
 
       <div className="quick-actions">
         <Link to="/live" className="action-button">Join Live Session</Link>
