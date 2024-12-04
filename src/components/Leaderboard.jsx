@@ -2,11 +2,31 @@ import { useState, useEffect } from 'react';
 import '../styles/Leaderboard.css';
 
 export default function Leaderboard() {
-  const [leaderboardData, setLeaderboardData] = useState([
-    { id: 1, name: 'John Doe', points: 1200, workouts: 15 },
-    { id: 2, name: 'Jane Smith', points: 1150, workouts: 14 },
-    { id: 3, name: 'Mike Johnson', points: 1100, workouts: 13 }
-  ]);
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+      try {
+        const response = await fetch('/api/leaderboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch leaderboard');
+        }
+        const data = await response.json();
+        setLeaderboardData(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLeaderboard();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <main className="leaderboard">
@@ -16,7 +36,7 @@ export default function Leaderboard() {
         <h2>Top Performers</h2>
         <div id="db-data">
           {leaderboardData.length === 0 ? (
-            <p>Loading leaderboard data...</p>
+            <p>No leaderboard data available</p>
           ) : (
             <table>
               <thead>
