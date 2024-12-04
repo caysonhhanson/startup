@@ -10,35 +10,12 @@ RealTime Fitness is an all-in-one platform for fitness enthusiasts and beginners
 - Responsive design that works across devices
 
 ## React Deliverable
+➡️ For this deliverable I converted the application to React and implemented component architecture.
 
-For this deliverable, I converted the application to use React components and created a single-page application structure.
-
-### Completed Elements:
-
-* **Bundled and transpiled** 
-- Successfully implemented Vite for bundling and deployment
-- Proper project structure with component organization
-- CSS modules for component-specific styling
-
-* **Components** 
-- Created modular React components:
- - Login: Handles user authentication and routing
- - Dashboard: Displays progress and recommended workouts
- - LiveSession: Shows workout stream and simulated coach interactions
- - Leaderboard: Displays mock leaderboard data
- - NavBar: Manages navigation and conditional rendering
-
-* **Router**
-- Implemented React Router for seamless navigation
-- Routes properly configured for all main views
-- Protected routing based on authentication status
-- Clean URL paths without .html extensions
-
-* **Hooks**
-- Utilized React hooks throughout components:
- - useState for managing component state (workouts, messages, leaderboard)
- - useEffect for simulating WebSocket connections
- - State management for authentication flows
+- Implemented Vite for bundling, with proper project structure and CSS modules.
+- Created React components for Login, Dashboard, LiveSession, Leaderboard, and NavBar with complete functionality.
+- Implemented React Router with protected routes and clean URL paths.
+- Used useState for component state management and useEffect for WebSocket simulation and data fetching.
 
 Previous deliverables included:
 
@@ -57,6 +34,15 @@ Previous deliverables included:
 - Centered and properly sized logo
 - Clean component layouts
 - Good contrast and spacing
+
+## Service Deliverable
+➡️ For this deliverable I added backend services to handle user data and API functionality.
+
+- Created Express server with HTTP endpoints for user authentication, workouts, and leaderboard data.
+- Successfully configured Express static middleware to serve the React frontend build.
+- Integrated Quotable API to fetch and display motivational quotes on the dashboard.
+- Created endpoints for login authentication, workout data storage, leaderboard rankings, and nutrition information.
+- Implemented fetch calls in React components to communicate with backend services.
 
 [View the demo](https://startup.cayson5.click)
 [View the code](https://github.com/caysonhhanson/startup.git)
