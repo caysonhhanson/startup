@@ -6,19 +6,38 @@ export default function LiveSession() {
   const [nutritionInfo, setNutritionInfo] = useState(null);
 
   useEffect(() => {
-    // Simulated WebSocket connection
-    const mockWsMessage = setInterval(() => {
-      setWsMessages(prev => [...prev, `Coach: Keep up the great work! ${new Date().toLocaleTimeString()}`]);
-    }, 5000);
+    // Fetch nutrition info from backend
+    const fetchNutritionInfo = async () => {
+      try {
+        const userId = localStorage.getItem('userId');
+        const response = await fetch(`/api/nutrition/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch nutrition info');
+        }
+        const data = await response.json();
+        setNutritionInfo(data);
+      } catch (error) {
+        console.error('Error fetching nutrition info:', error);
+      }
+    };
 
-    setNutritionInfo({
-      calories: 2500,
-      protein: "180g",
-      carbs: "250g",
-      fats: "70g"
-    });
+    fetchNutritionInfo();
 
-    return () => clearInterval(mockWsMessage);
+    // WebSocket connection for live messages
+    const ws = new WebSocket(`ws://${window.location.hostname}:4000/ws`);
+    
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      setWsMessages(prev => [...prev, message]);
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
   return (
