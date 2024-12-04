@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,10 +23,10 @@ export default function Login() {
       }
       
       const data = await response.json();
-      localStorage.setItem('userId', data.id);
+      localStorage.setItem('userEmail', data.email);
       navigate('/dashboard');
     } catch (err) {
-      setError('Invalid email or password');
+      setError('Login failed');
     }
   };
 
@@ -35,7 +34,7 @@ export default function Login() {
     <main>
       <div className="intro section">
         <h2>Join Live Workout Sessions</h2>
-        <p>Your all-in-one platform for personalized fitness training and live coach interaction.</p>
+        <p>Your all-in-one platform for personalized fitness training.</p>
       </div>
 
       <div className="login section">
@@ -62,7 +61,6 @@ export default function Login() {
           </div>
           <button type="submit">Login</button>
         </form>
-        <p>Don't have an account? <a href="#">Register here</a></p>
       </div>
     </main>
   );
