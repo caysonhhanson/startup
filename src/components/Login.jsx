@@ -5,12 +5,30 @@ import '../styles/Login.css';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // Login logic will go here later
-    navigate('/dashboard');
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Login failed');
+      }
+      
+      const data = await response.json();
+      localStorage.setItem('userId', data.id);
+      navigate('/dashboard');
+    } catch (err) {
+      setError('Invalid email or password');
+    }
   };
 
   return (
@@ -22,6 +40,7 @@ export default function Login() {
 
       <div className="login section">
         <h2>Login to Your Account</h2>
+        {error && <p className="error">{error}</p>}
         <form onSubmit={handleLogin}>
           <div>
             <label>Email:</label>
