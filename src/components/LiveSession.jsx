@@ -6,7 +6,6 @@ export default function LiveSession() {
   const [nutritionInfo, setNutritionInfo] = useState(null);
 
   useEffect(() => {
-    // Fetch nutrition info from backend
     const fetchNutritionInfo = async () => {
       try {
         const userId = localStorage.getItem('userId');
@@ -23,7 +22,6 @@ export default function LiveSession() {
 
     fetchNutritionInfo();
 
-    // WebSocket connection for live messages
     const ws = new WebSocket(`ws://${window.location.hostname}:4000/ws`);
     
     ws.onmessage = (event) => {
@@ -50,30 +48,36 @@ export default function LiveSession() {
         </div>
       </section>
 
-      <section id="nutrition-info">
+      <section className="info-box nutrition-box">
         <h2>Nutrition Information For You</h2>
-        {nutritionInfo && (
-          <div className="nutrition-data">
-            <p>Your Daily Nutrition Targets:</p>
-            <ul>
-              <li>Calories: {nutritionInfo.calories}</li>
-              <li>Protein: {nutritionInfo.protein}</li>
-              <li>Carbs: {nutritionInfo.carbs}</li>
-              <li>Fats: {nutritionInfo.fats}</li>
-            </ul>
-          </div>
-        )}
+        <div className="info-content">
+          {nutritionInfo ? (
+            <div className="nutrition-data">
+              <p>Your Daily Nutrition Targets:</p>
+              <ul>
+                <li>Calories: {nutritionInfo.calories}</li>
+                <li>Protein: {nutritionInfo.protein}</li>
+                <li>Carbs: {nutritionInfo.carbs}</li>
+                <li>Fats: {nutritionInfo.fats}</li>
+              </ul>
+            </div>
+          ) : (
+            <p>No nutrition information to display</p>
+          )}
+        </div>
       </section>
 
-      <section id="websocket-data">
-        <h2>Coach Interaction</h2>
-        <div className="messages">
-          {wsMessages.length === 0 ? (
-            <p>Waiting for coach messages...</p>
+      <section className="info-box message-box">
+        <h2>Coach Messages</h2>
+        <div className="info-content">
+          {wsMessages.length > 0 ? (
+            <div className="messages">
+              {wsMessages.map((msg, index) => (
+                <p key={index} className="message">{msg}</p>
+              ))}
+            </div>
           ) : (
-            wsMessages.map((msg, index) => (
-              <p key={index} className="message">{msg}</p>
-            ))
+            <p>Waiting for coach messages...</p>
           )}
         </div>
       </section>
