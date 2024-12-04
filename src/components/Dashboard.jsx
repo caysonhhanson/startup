@@ -65,16 +65,10 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="workout-recommendations">
-        <h2>Your Recent Workouts</h2>
-        <div id="recommended-workouts">
-          <ul>
-            {workouts.map(workout => (
-              <li key={workout.id} className="workout-item">
-                <strong>{workout.name}</strong> - {workout.duration} min
-              </li>
-            ))}
-          </ul>
+      <div className="workout-box">
+        <h2>Recent Workouts</h2>
+        <div className="workout-content">
+          <p>No recent workouts to display</p>
         </div>
       </div>
     </main>
