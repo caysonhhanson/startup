@@ -1,67 +1,38 @@
 .leaderboard-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-top: 2rem;
-  }
-  
-  .leaderboard-container h1 {
-    color: #00ff9d;
-    margin-bottom: 2rem;
-  }
-  
-  .table {
-    background-color: #1a1a1a;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .table thead th {
-    background-color: #00ff9d;
-    color: #1a1a1a;
-    font-weight: bold;
-    border: none;
-  }
-  
-  .table tbody tr {
-    transition: background-color 0.2s;
-  }
-  
-  .table tbody tr:hover {
-    background-color: rgba(0, 255, 157, 0.1);
-  }
-  
-  .table td {
-    vertical-align: middle;
-    border-color: #333;
-  }
-  
-  .table tbody tr:nth-child(1) td:first-child {
-    color: gold;
-    font-weight: bold;
-  }
-  
-  .table tbody tr:nth-child(2) td:first-child {
-    color: silver;
-    font-weight: bold;
-  }
-  
-  .table tbody tr:nth-child(3) td:first-child {
-    color: #cd7f32;
-    font-weight: bold;
-  }
-  
-  .text-accent {
-    color: #00ff9d;
-  }
-  
-  .bg-gradient {
-    background: linear-gradient(to bottom, #1a1a1a, #2d2d2d);
-  }
-  
-  .card-dark {
-    background-color: #1a1a1a;
-    border: 1px solid #333;
-  }
-  
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 2rem;
+}
+
+.leaderboard-container h1 {
+  color: #2196f3; /* Blue */
+  margin-bottom: 2rem;
+}
+
+.table {
+  background-color: #f8f9fa; /* Light grey */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table thead th {
+  background-color: #90caf9; /* Light blue */
+  color: #424242;
+  font-weight: bold;
+  border: none;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(144, 202, 249, 0.1); /* Light blue with opacity */
+}
+
+.table td {
+  vertical-align: middle;
+  border-color: #e0e0e0;
+}

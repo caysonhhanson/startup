@@ -2,12 +2,12 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #1a1a1a, #2d2d2d);
+  background: linear-gradient(to bottom, #f5f5f5, #e0e0e0); /* Light grey gradient */
 }
 
 header {
   flex: 0 80px;
-  background: #1a1a1a;
+  background: #f8f9fa; /* Light grey */
 }
 
 main {
@@ -15,12 +15,12 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #2d2d2d;
+  background: #e3f2fd; /* Light blue */
 }
 
 footer {
   flex: 0 50px;
-  background: #1a1a1a;
+  background: #f8f9fa; /* Light grey */
   padding: 10px;
 }
 
@@ -35,8 +35,8 @@ menu {
 
 .navbar-brand {
   padding-left: 0.3em;
-  border-bottom: solid rgb(182, 182, 182) thin;
-  color: #00ff9d;
+  border-bottom: solid #90caf9 thin; /* Light blue */
+  color: #2196f3; /* Brighter blue for contrast */
   font-weight: bold;
 }
 
@@ -44,16 +44,19 @@ menu .nav-item {
   padding: 0 0.3em;
 }
 
-footer a {
-  float: right;
-  color: rgb(182, 182, 182);
+menu .nav-item .nav-link {
+  color: #424242; /* Dark grey text */
 }
 
-@media (max-height: 600px) {
-  header {
-    display: none;
-  }
-  footer {
-    display: none;
-  }
+menu .nav-item .nav-link:hover {
+  color: #2196f3; /* Blue on hover */
+}
+
+menu .nav-item .nav-link.active {
+  color: #2196f3; /* Blue for active link */
+}
+
+footer a {
+  float: right;
+  color: #757575; /* Darker grey for readability */
 }
