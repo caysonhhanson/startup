@@ -1,4 +1,3 @@
-// src/app.jsx
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { AuthState } from './login/authState';
@@ -6,6 +5,7 @@ import { Login } from './login/login';
 import { Dashboard } from './dashboard/dashboard';
 import { LiveSession } from './live-session/liveSession';
 import { Leaderboard } from './leaderboard/leaderboard';
+import logo from './assets/logo.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 
@@ -18,37 +18,40 @@ function App() {
     <BrowserRouter>
       <div className='body bg-dark text-light'>
         <header className='container-fluid'>
-          <nav className='navbar fixed-top navbar-dark'>
-            <div className='navbar-brand'>
-              RealTime Fitness
-            </div>
-            <menu className='navbar-nav'>
-              <li className='nav-item'>
-                <NavLink className='nav-link' to=''>
-                  Login
-                </NavLink>
-              </li>
-              {authState === AuthState.Authenticated && (
-                <>
-                  <li className='nav-item'>
-                    <NavLink className='nav-link' to='dashboard'>
-                      Dashboard
-                    </NavLink>
-                  </li>
-                  <li className='nav-item'>
-                    <NavLink className='nav-link' to='live'>
-                      Live Sessions
-                    </NavLink>
-                  </li>
-                  <li className='nav-item'>
-                    <NavLink className='nav-link' to='leaderboard'>
-                      Leaderboard
-                    </NavLink>
-                  </li>
-                </>
-              )}
-            </menu>
-          </nav>
+        <nav className='navbar fixed-top navbar-dark'>
+  <div className='d-flex align-items-center'>
+    <img src={logo} alt="RealTime Fitness Logo" className='nav-logo' />
+    <div className='navbar-brand'>
+      RealTime Fitness
+    </div>
+  </div>
+  <menu className='navbar-nav'>
+    <li className='nav-item'>
+      <NavLink className='nav-link' to=''>
+        Login
+      </NavLink>
+    </li>
+    {authState === AuthState.Authenticated && (
+      <>
+        <li className='nav-item'>
+          <NavLink className='nav-link' to='dashboard'>
+            Dashboard
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink className='nav-link' to='live'>
+            Live Sessions
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink className='nav-link' to='leaderboard'>
+            Leaderboard
+          </NavLink>
+        </li>
+      </>
+    )}
+  </menu>
+</nav>
         </header>
 
         <Routes>

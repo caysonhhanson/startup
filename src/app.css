@@ -6,7 +6,7 @@
 }
 
 header {
-  flex: 0 80px;
+  flex: 0 120px;
   background: #f8f9fa; /* Light grey */
 }
 
@@ -54,6 +54,12 @@ menu .nav-item .nav-link:hover {
 
 menu .nav-item .nav-link.active {
   color: #2196f3; /* Blue for active link */
+}
+
+.nav-logo {
+  height: 120px;
+  width: auto;
+  padding: 10px;
 }
 
 footer a {
