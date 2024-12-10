@@ -1,4 +1,3 @@
-// src/dashboard/dashboard.jsx
 import React from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import './dashboard.css';

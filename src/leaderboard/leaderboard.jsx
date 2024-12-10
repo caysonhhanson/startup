@@ -1,4 +1,3 @@
-// src/leaderboard/leaderboard.jsx
 import React from 'react';
 import { Table } from 'react-bootstrap';
 import './leaderboard.css';
