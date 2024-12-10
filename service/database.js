@@ -57,13 +57,34 @@ async function getUserStats(email) {
 
 async function addWorkout(workout) {
   const result = await workoutCollection.insertOne(workout);
+  
+  // Update user stats
+  await userCollection.updateOne(
+    { _id: workout.userId },
+    { 
+      $inc: { 
+        workoutsCompleted: 1,
+        fitnessScore: calculateWorkoutScore(workout)
+      }
+    }
+  );
+  
   return result;
+}
+
+function calculateWorkoutScore(workout) {
+  // Example scoring logic
+  return workout.duration * 10;
 }
 
 async function getUpcomingSessions() {
   const sessions = await workoutCollection.find({
     startTime: { $gt: new Date() }
-  }).limit(10).toArray();
+  })
+  .sort({ startTime: 1 })
+  .limit(10)
+  .toArray();
+  
   return sessions;
 }
 

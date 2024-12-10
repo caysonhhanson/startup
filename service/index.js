@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
+const { WebSocketServer } = require('ws');
 
 const authCookieName = 'token';
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -54,6 +55,7 @@ secureApiRouter.use(async (req, res, next) => {
   const authToken = req.cookies[authCookieName];
   const user = await DB.getUserByToken(authToken);
   if (user) {
+    req.user = user;
     next();
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -97,6 +99,81 @@ function setAuthCookie(res, authToken) {
   });
 }
 
+// Create HTTP server
 const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+// Create WebSocket server
+const wss = new WebSocketServer({ server: httpService });
+
+// Store active connections
+const connections = new Set();
+
+// Handle WebSocket connection
+wss.on('connection', (ws) => {
+  connections.add(ws);
+  
+  // Send initial data
+  sendLeaderboardUpdate(ws);
+  sendSessionsUpdate(ws);
+  
+  ws.on('message', async (data) => {
+    const msg = JSON.parse(data);
+    
+    if (msg.type === 'workout_complete') {
+      await DB.addWorkout(msg.workout);
+      broadcastLeaderboard();
+    }
+  });
+  
+  ws.on('close', () => {
+    connections.delete(ws);
+  });
+});
+
+// Broadcast functions
+async function broadcastLeaderboard() {
+  const leaders = await DB.getLeaderboard();
+  const message = JSON.stringify({
+    type: 'leaderboard_update',
+    data: leaders
+  });
+  
+  connections.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(message);
+    }
+  });
+}
+
+async function sendLeaderboardUpdate(ws) {
+  const leaders = await DB.getLeaderboard();
+  ws.send(JSON.stringify({
+    type: 'leaderboard_update',
+    data: leaders
+  }));
+}
+
+async function sendSessionsUpdate(ws) {
+  const sessions = await DB.getUpcomingSessions();
+  ws.send(JSON.stringify({
+    type: 'sessions_update',
+    data: sessions
+  }));
+}
+
+// Periodically update live sessions
+setInterval(async () => {
+  const sessions = await DB.getUpcomingSessions();
+  const message = JSON.stringify({
+    type: 'sessions_update',
+    data: sessions
+  });
+  
+  connections.forEach((client) => {
+    if (client.readyState === 1) {
+      client.send(message);
+    }
+  });
+}, 30000);
