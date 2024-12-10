@@ -6,36 +6,132 @@
 }
 
 .live-session-container h1 {
-  color: #2196f3; /* Blue */
+  color: #2196f3;
   margin-bottom: 2rem;
+  font-weight: bold;
 }
 
 .session-card {
   height: 100%;
-  transition: transform 0.2s;
-  background: #f8f9fa; /* Light grey */
+  transition: all 0.3s ease;
+  background: #f8f9fa;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .session-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.card-body {
+  padding: 1.5rem;
 }
 
 .btn-primary {
-  background-color: #2196f3; /* Blue */
+  background-color: #2196f3;
   border-color: #2196f3;
   color: #ffffff;
   font-weight: bold;
   transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
 }
 
-.btn-primary:hover {
-  background-color: #1976d2; /* Slightly darker blue */
+.btn-primary:hover:not(:disabled) {
+  background-color: #1976d2;
   border-color: #1976d2;
   transform: scale(1.05);
 }
 
+.btn-primary:disabled {
+  background-color: #90caf9;
+  border-color: #90caf9;
+  cursor: not-allowed;
+}
+
 .no-sessions {
-  color: #757575; /* Grey */
+  color: #757575;
   font-style: italic;
   margin-top: 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.alert {
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.alert-danger {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.alert-warning {
+  background-color: rgba(255, 152, 0, 0.1);
+  border-color: #ff9800;
+  color: #ff9800;
+}
+
+.badge {
+  padding: 0.5em 0.75em;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.badge-success {
+  background-color: #4caf50;
+}
+
+.badge-warning {
+  background-color: #ff9800;
+}
+
+.badge-danger {
+  background-color: #f44336;
+}
+
+.badge-primary {
+  background-color: #2196f3;
+}
+
+/* Animation for connection status */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.connecting {
+  animation: pulse 1.5s infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .live-session-container {
+    padding-top: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .btn-primary {
+    margin-top: 0.5rem;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
 }
