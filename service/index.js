@@ -1,147 +1,102 @@
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const express = require('express');
-const { connectToDatabase, createUser, getUser, validatePassword } = require('./database.js');
-const jwt = require('jsonwebtoken');
 const app = express();
+const DB = require('./database.js');
 
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-const jwtSecret = 'your-secret-key-here';
-
-let db; // Add this for database reference
+const authCookieName = 'token';
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
 app.use(express.json());
-app.use(express.static('../dist'));
+app.use(cookieParser());
+app.use(express.static('public'));
+app.set('trust proxy', true);
 
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.sendStatus(401);
-
-  jwt.verify(token, jwtSecret, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
-
-// API Routes
+// Router for service endpoints
 const apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-// Register endpoint
-apiRouter.post('/auth/register', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Validate email format
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      return res.status(400).json({ message: 'Invalid email format' });
-    }
-
-    // Validate password
-    if (!password || password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
-    }
-    
-    // Check if user exists
-    const existingUser = await getUser(email);
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
-    }
-
-    // Create new user
-    await createUser(email, password);
-    
-    // Generate token and send response
-    const token = jwt.sign({ email }, jwtSecret);
-    res.status(201).json({ token, email });
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Error creating user' });
+// CreateAuth token for a new user
+apiRouter.post('/auth/create', async (req, res) => {
+  if (await DB.getUser(req.body.email)) {
+    res.status(409).send({ msg: 'Existing user' });
+  } else {
+    const user = await DB.createUser(req.body.email, req.body.password);
+    setAuthCookie(res, user.token);
+    res.send({ id: user._id });
   }
 });
 
-// Login endpoint
+// GetAuth token for the provided credentials
 apiRouter.post('/auth/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Find user
-    const user = await getUser(email);
-    if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+  const user = await DB.getUser(req.body.email);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      return;
     }
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
 
-    // Validate password
-    const validPassword = await validatePassword(user, password);
-    if (!validPassword) {
-      return res.status(400).json({ message: 'Invalid password' });
-    }
+// DeleteAuth token if stored in cookie
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
 
-    // Generate token and send response
-    const token = jwt.sign({ email }, jwtSecret);
-    res.json({ token, email });
-  } catch (error) {
-    res.status(500).json({ message: 'Error logging in' });
+// secureApiRouter verifies credentials for endpoints
+const secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  const authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
   }
 });
 
-// Protected routes
-apiRouter.get('/workouts', (_req, res) => {
-  res.json([
-    { id: 1, name: 'HIIT Training', duration: 30 },
-    { id: 2, name: 'Strength Building', duration: 45 }
-  ]);
+// Get user stats
+secureApiRouter.get('/user/stats', async (req, res) => {
+  const stats = await DB.getUserStats(req.user?.email);
+  res.send(stats);
 });
 
-apiRouter.get('/leaderboard', (_req, res) => {
-  res.json([
-    { id: 1, name: 'John Doe', points: 1200, workouts: 15 },
-    { id: 2, name: 'Jane Smith', points: 1150, workouts: 14 },
-    { id: 3, name: 'Mike Johnson', points: 1100, workouts: 13 }
-  ]);
+// Get upcoming sessions
+secureApiRouter.get('/sessions', async (req, res) => {
+  const sessions = await DB.getUpcomingSessions();
+  res.send(sessions);
 });
 
-apiRouter.get('/workouts/:userId', authenticateToken, (_req, res) => {
-  res.json([
-    { id: 1, type: 'HIIT', duration: 30, calories: 300, date: new Date() },
-    { id: 2, type: 'Strength', duration: 45, calories: 400, date: new Date() }
-  ]);
+// Get leaderboard
+secureApiRouter.get('/leaderboard', async (req, res) => {
+  const leaders = await DB.getLeaderboard();
+  res.send(leaders);
 });
 
-apiRouter.get('/nutrition/:userId', authenticateToken, (_req, res) => {
-  res.json({
-    calories: 2000,
-    protein: '150g',
-    carbs: '200g',
-    fats: '70g'
+// Record completed workout
+secureApiRouter.post('/workout/complete', async (req, res) => {
+  const workout = {
+    ...req.body,
+    userId: req.user?._id,
+    completedAt: new Date()
+  };
+  await DB.addWorkout(workout);
+  res.send({ status: 'success' });
+});
+
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
   });
-});
-
-// Error handling
-app.use(function (err, req, res, next) {
-  res.status(500).send({ type: err.name, message: err.message });
-});
-
-// Default route handler
-app.use((_req, res) => {
-  res.sendFile('index.html', { root: '../dist' });
-});
-
-// Start server with database connection
-async function startServer() {
-  try {
-    const database = await connectToDatabase();
-    db = database; // Store database reference
-    app.listen(port, () => {
-      console.log(`Listening on port ${port}`);
-    });
-  } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  }
 }
 
-startServer();
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});

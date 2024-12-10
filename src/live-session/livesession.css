@@ -1,0 +1,40 @@
+.live-session-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 2rem;
+  }
+  
+  .live-session-container h1 {
+    color: #00ff9d;
+    margin-bottom: 2rem;
+  }
+  
+  .session-card {
+    height: 100%;
+    transition: transform 0.2s;
+  }
+  
+  .session-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .btn-primary {
+    background-color: #00ff9d;
+    border-color: #00ff9d;
+    color: #1a1a1a;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #00cc7d;
+    border-color: #00cc7d;
+    transform: scale(1.05);
+  }
+  
+  .no-sessions {
+    color: #888;
+    font-style: italic;
+    margin-top: 2rem;
+  }
