@@ -1,20 +1,26 @@
 {
-  "name": "startup",
-  "version": "0.1.0",
-  "private": true,
+  "name": "realtime-fitness",
+  "version": "1.0.0",
+  "description": "RealTime Fitness web application",
+  "main": "service/index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^4.3.2"
+    "preview": "vite preview",
+    "start": "node service/index.js"
   },
   "dependencies": {
-    "bootstrap": "^5.2.3",
+    "bcrypt": "^5.1.1",
+    "express": "^4.18.2",
+    "mongodb": "^6.12.0",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^6.21.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.0.8"
   }
 }

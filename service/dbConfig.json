@@ -1,6 +1,6 @@
 {
     "hostname": "startup.x45rf.mongodb.net",
-    "userName": "cayson5",
+    "database": "startup",
+    "username": "cayson5",
     "password": "cs260password"
   }
-  

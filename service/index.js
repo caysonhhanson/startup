@@ -1,179 +1,102 @@
-const cookieParser = require('cookie-parser');
-const bcrypt = require('bcrypt');
 const express = require('express');
+const { MongoClient } = require('mongodb');
+const bcrypt = require('bcrypt');
 const app = express();
-const DB = require('./database.js');
-const { WebSocketServer } = require('ws');
+const config = require('./dbConfig.json');
 
-const authCookieName = 'token';
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
+const url = `mongodb+srv://${config.username}:${config.password}@${config.hostname}`;
+const client = new MongoClient(url);
+const db = client.db('startup');
 
+// Express setup
 app.use(express.json());
-app.use(cookieParser());
 app.use(express.static('public'));
-app.set('trust proxy', true);
 
-// Router for service endpoints
-const apiRouter = express.Router();
-app.use(`/api`, apiRouter);
-
-// CreateAuth token for a new user
-apiRouter.post('/auth/create', async (req, res) => {
-  if (await DB.getUser(req.body.email)) {
-    res.status(409).send({ msg: 'Existing user' });
-  } else {
-    const user = await DB.createUser(req.body.email, req.body.password);
-    setAuthCookie(res, user.token);
-    res.send({ id: user._id });
+// MongoDB connection
+(async function () {
+  try {
+    await client.connect();
+    console.log('Connected to MongoDB');
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
   }
-});
+})();
 
-// GetAuth token for the provided credentials
-apiRouter.post('/auth/login', async (req, res) => {
-  const user = await DB.getUser(req.body.email);
-  if (user) {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      setAuthCookie(res, user.token);
-      res.send({ id: user._id });
+// Authentication endpoints
+app.post('/api/auth/register', async (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  
+  try {
+    const existingUser = await db.collection('users').findOne({ email });
+    if (existingUser) {
+      res.status(409).send({ message: 'User already exists' });
       return;
     }
-  }
-  res.status(401).send({ msg: 'Unauthorized' });
-});
 
-// DeleteAuth token if stored in cookie
-apiRouter.delete('/auth/logout', (_req, res) => {
-  res.clearCookie(authCookieName);
-  res.status(204).end();
-});
+    const result = await db.collection('users').insertOne({
+      email,
+      password: hashedPassword,
+      createdAt: new Date()
+    });
 
-// secureApiRouter verifies credentials for endpoints
-const secureApiRouter = express.Router();
-apiRouter.use(secureApiRouter);
-
-secureApiRouter.use(async (req, res, next) => {
-  const authToken = req.cookies[authCookieName];
-  const user = await DB.getUserByToken(authToken);
-  if (user) {
-    req.user = user;
-    next();
-  } else {
-    res.status(401).send({ msg: 'Unauthorized' });
+    res.send({ id: result.insertedId, email });
+  } catch (error) {
+    res.status(500).send({ message: 'Error creating user' });
   }
 });
 
-// Get user stats
-secureApiRouter.get('/user/stats', async (req, res) => {
-  const stats = await DB.getUserStats(req.user?.email);
-  res.send(stats);
+app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
+    const user = await db.collection('users').findOne({ email });
+    if (!user) {
+      res.status(401).send({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      res.status(401).send({ message: 'Invalid credentials' });
+      return;
+    }
+
+    res.send({ id: user._id, email: user.email });
+  } catch (error) {
+    res.status(500).send({ message: 'Error logging in' });
+  }
 });
 
-// Get upcoming sessions
-secureApiRouter.get('/sessions', async (req, res) => {
-  const sessions = await DB.getUpcomingSessions();
-  res.send(sessions);
+// Protected data endpoints
+const authMiddleware = async (req, res, next) => {
+  const userId = req.headers['user-id'];
+  if (!userId) {
+    res.status(401).send({ message: 'Unauthorized' });
+    return;
+  }
+  next();
+};
+
+app.get('/api/workouts', authMiddleware, async (req, res) => {
+  try {
+    const workouts = await db.collection('workouts').find().toArray();
+    res.send(workouts);
+  } catch (error) {
+    res.status(500).send({ message: 'Error fetching workouts' });
+  }
 });
 
-// Get leaderboard
-secureApiRouter.get('/leaderboard', async (req, res) => {
-  const leaders = await DB.getLeaderboard();
-  res.send(leaders);
+app.get('/api/leaderboard', authMiddleware, async (req, res) => {
+  try {
+    const leaderboard = await db.collection('leaderboard').find().toArray();
+    res.send(leaderboard);
+  } catch (error) {
+    res.status(500).send({ message: 'Error fetching leaderboard' });
+  }
 });
 
-// Record completed workout
-secureApiRouter.post('/workout/complete', async (req, res) => {
-  const workout = {
-    ...req.body,
-    userId: req.user?._id,
-    completedAt: new Date()
-  };
-  await DB.addWorkout(workout);
-  res.send({ status: 'success' });
-});
-
-function setAuthCookie(res, authToken) {
-  res.cookie(authCookieName, authToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict',
-  });
-}
-
-// Create HTTP server
-const httpService = app.listen(port, () => {
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-// Create WebSocket server
-const wss = new WebSocketServer({ server: httpService });
-
-// Store active connections
-const connections = new Set();
-
-// Handle WebSocket connection
-wss.on('connection', (ws) => {
-  connections.add(ws);
-  
-  // Send initial data
-  sendLeaderboardUpdate(ws);
-  sendSessionsUpdate(ws);
-  
-  ws.on('message', async (data) => {
-    const msg = JSON.parse(data);
-    
-    if (msg.type === 'workout_complete') {
-      await DB.addWorkout(msg.workout);
-      broadcastLeaderboard();
-    }
-  });
-  
-  ws.on('close', () => {
-    connections.delete(ws);
-  });
-});
-
-// Broadcast functions
-async function broadcastLeaderboard() {
-  const leaders = await DB.getLeaderboard();
-  const message = JSON.stringify({
-    type: 'leaderboard_update',
-    data: leaders
-  });
-  
-  connections.forEach((client) => {
-    if (client.readyState === 1) {
-      client.send(message);
-    }
-  });
-}
-
-async function sendLeaderboardUpdate(ws) {
-  const leaders = await DB.getLeaderboard();
-  ws.send(JSON.stringify({
-    type: 'leaderboard_update',
-    data: leaders
-  }));
-}
-
-async function sendSessionsUpdate(ws) {
-  const sessions = await DB.getUpcomingSessions();
-  ws.send(JSON.stringify({
-    type: 'sessions_update',
-    data: sessions
-  }));
-}
-
-// Periodically update live sessions
-setInterval(async () => {
-  const sessions = await DB.getUpcomingSessions();
-  const message = JSON.stringify({
-    type: 'sessions_update',
-    data: sessions
-  });
-  
-  connections.forEach((client) => {
-    if (client.readyState === 1) {
-      client.send(message);
-    }
-  });
-}, 30000);
