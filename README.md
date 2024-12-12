@@ -57,6 +57,14 @@ For this deliverable I associate the personalized workouts and dashboare with th
 - Use MongoDB to store credentials - Stores both user and their votes.
 - Restricts functionality - You cannot vote until you have logged in.
 
+## WebSocket Deliverable
+For this deliverable I added websocket to the server and the leaderboard.
+    -- Backend listens for WebSocket connection  Done!
+    -- Frontend makes WebSocket connection  Done!
+    -- Data sent over WebSocket connection  Nope! Didn't have time to log wokrout data to send.
+    -- WebSocket data displayed in the application interface - Nope didn't have enough time to write a way to log workouts. The Leaderboard doesn't even display anything cause of that,
+    -- All visible elements are working Nope! Not even close
+
 
 [View the demo](https://startup.cayson5.click)
 [View the code](https://github.com/caysonhhanson/startup.git)
