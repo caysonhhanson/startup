@@ -18,12 +18,18 @@ printf "\n----> Deploying React bundle $service to $hostname with $key\n"
 # Step 1
 printf "\n----> Build the distribution package\n"
 rm -rf build
-mkdir build
-npm install # make sure vite is installed so that we can bundle
-npm run build # build the React front end
-cp -rf dist build/public # move the React front end to the target distribution
-cp service/*.js build # move the back end service to the target distribution
-cp service/*.json build
+mkdir -p build/public
+npm install
+npm run build
+
+# Copy the Vite build output to the public directory
+cp -r dist/* build/public/
+
+# Copy the backend files
+mkdir -p build
+cp service/*.js build/
+cp service/*.json build/
+cp package*.json build/
 
 # Step 2
 printf "\n----> Clearing out previous distribution on the target\n"
@@ -39,10 +45,22 @@ scp -r -i "$key" build/* ubuntu@$hostname:services/$service
 # Step 4
 printf "\n----> Deploy the service on the target\n"
 ssh -i "$key" ubuntu@$hostname << ENDSSH
-bash -i
 cd services/${service}
 npm install
-pm2 restart ${service}
+if ! command -v pm2 &> /dev/null; then
+    echo "Installing PM2..."
+    npm install -g pm2
+fi
+# Check if the service is already running in PM2
+if pm2 list | grep -q ${service}; then
+    echo "Restarting existing service..."
+    pm2 restart ${service}
+else
+    echo "Starting new service..."
+    cd /home/ubuntu/services/${service}
+    pm2 start index.js --name ${service}
+fi
+pm2 save
 ENDSSH
 
 # Step 5
