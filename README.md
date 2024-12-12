@@ -44,5 +44,18 @@ Previous deliverables included:
 - Created endpoints for login authentication, workout data storage, leaderboard rankings, and nutrition information.
 - Implemented fetch calls in React components to communicate with backend services.
 
+## DB/Login deliverable
+For this deliverable I associate the personalized workouts and dashboare with the logged in user. I stored their info in the database.
+- MongoDB Atlas database created - done!
+- Stores data in MongoDB - done!
+- User registration - Creates a new account in the database.
+- existing user - Stores info under the same user if the user already exists.
+- Use MongoDB to store credentials - Stores both user and their votes.
+- Restricts functionality - You cannot vote until you have logged in.
+
+
+[View the demo](https://startup.cayson5.click)
+[View the code](https://github.com/caysonhhanson/startup.git)
+
 [View the demo](https://startup.cayson5.click)
 [View the code](https://github.com/caysonhhanson/startup.git)
