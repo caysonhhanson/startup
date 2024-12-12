@@ -54,8 +54,8 @@ For this deliverable I associate the personalized workouts and dashboare with th
 - Stores data in MongoDB - done!
 - User registration - Creates a new account in the database.
 - existing user - Stores info under the same user if the user already exists.
-- Use MongoDB to store credentials - Stores both user and their votes.
-- Restricts functionality - You cannot vote until you have logged in.
+- Use MongoDB to store credentials - Stores both user and their data.
+- Restricts functionality - You cannot access any other pages until you have logged in.
 
 ## WebSocket Deliverable
 For this deliverable I added websocket to the server and the leaderboard.
